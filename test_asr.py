@@ -1,5 +1,7 @@
 import argparse
 import asyncio
+from dotenv import load_dotenv
+load_dotenv()
 from backend.services.asr import asr_service
 import os
 

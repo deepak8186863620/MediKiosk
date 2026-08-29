@@ -1,7 +1,7 @@
 import os
 import torch
 import torchaudio
-from transformers import AutoModelForCTC, AutoProcessor
+from transformers import AutoModel
 from huggingface_hub import login
 import time
 
@@ -32,8 +32,7 @@ class ASRService:
             
         print(f"Loading ASR model {self.model_id} on {self.device}...")
         try:
-            self.processor = AutoProcessor.from_pretrained(self.model_id, token=hf_token)
-            self.model = AutoModelForCTC.from_pretrained(self.model_id, token=hf_token)
+            self.model = AutoModel.from_pretrained(self.model_id, token=hf_token, trust_remote_code=True)
             self.model.to(self.device)
             self.model.eval()
             print("ASR model loaded successfully.")
@@ -65,18 +64,20 @@ class ASRService:
         
         try:
             audio_array = self.process_audio(audio_file_path)
-            
-            # The indicative conformer model might require specific language tokens or settings
-            # We'll use the generic process for now unless specific lang ids are required in processor
-            inputs = self.processor(audio_array, sampling_rate=16000, return_tensors="pt")
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            # The custom model expects a tensor, not numpy array
+            wav_tensor = torch.tensor(audio_array).unsqueeze(0).to(self.device)
             
             with torch.no_grad():
-                logits = self.model(**inputs).logits
+                # Inference using custom ai4bharat implementation format: model(wav, lang_code, strategy)
+                transcription = self.model(wav_tensor, lang_code, "ctc")
                 
-            predicted_ids = torch.argmax(logits, dim=-1)
-            transcription = self.processor.batch_decode(predicted_ids)[0]
-            
+            # If it returns a list of lists, take the first string
+            if isinstance(transcription, list) and len(transcription) > 0:
+                if isinstance(transcription[0], list):
+                    transcription = transcription[0][0]
+                else:
+                    transcription = transcription[0]
+                    
             process_time = time.time() - start_time
             
             return {
