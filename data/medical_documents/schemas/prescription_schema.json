@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prescription Extraction Schema",
+  "type": "object",
+  "properties": {
+    "document_id": { "type": "string" },
+    "document_type": { "type": "string" },
+    "date": { "type": "string" },
+    "patient_name": { "type": "string" },
+    "diagnoses": { "type": "array", "items": { "type": "string" } },
+    "medications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "dose": { "type": "string" },
+          "frequency": { "type": "string" },
+          "duration": { "type": "string" }
+        }
+      }
+    },
+    "investigations": { "type": "array", "items": { "type": "string" } },
+    "procedures": { "type": "array", "items": { "type": "string" } }
+  }
+}

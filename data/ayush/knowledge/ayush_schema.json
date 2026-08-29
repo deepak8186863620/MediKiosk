@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AYUSH Knowledge Schema",
+  "type": "object",
+  "properties": {
+    "ayush_parameter": { "type": "string" },
+    "question": { "type": "string" },
+    "options": { "type": "array", "items": { "type": "string" } },
+    "expected_field": { "type": "string" },
+    "language": { "type": "string" },
+    "source": { "type": "string" },
+    "expert_review_required": { "type": "boolean" },
+    "review_status": { "type": "string", "enum": ["draft", "reviewed", "clinician_validated"] }
+  }
+}

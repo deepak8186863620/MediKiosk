@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adaptive Question Schema",
+  "type": "object",
+  "properties": {
+    "complaint": { "type": "string" },
+    "question_id": { "type": "string" },
+    "question": { "type": "string" },
+    "purpose": { "type": "string" },
+    "required": { "type": "boolean" },
+    "question_type": { "type": "string", "enum": ["single_choice", "multiple_choice", "open_ended"] },
+    "possible_answers": { "type": "array", "items": { "type": "string" } },
+    "next_questions": { "type": "array", "items": { "type": "string" } },
+    "red_flag_relevance": { "type": "boolean" },
+    "source": { "type": "string" },
+    "review_status": { "type": "string", "enum": ["draft", "reviewed", "clinician_validated"] }
+  },
+  "required": ["complaint", "question_id", "question", "question_type"]
+}

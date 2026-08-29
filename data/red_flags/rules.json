@@ -1,0 +1,22 @@
+[
+  {
+    "rule_id": "RF_001",
+    "condition": "Potential acute chest-pain emergency",
+    "symptoms": ["severe chest pain", "breathlessness", "sweating", "left arm pain"],
+    "required_combination": "severe chest pain AND (breathlessness OR sweating OR left arm pain)",
+    "priority": "HIGH",
+    "action": "Redirect to emergency triage immediately.",
+    "message": "POTENTIAL RED FLAG: Immediate clinical assessment recommended.",
+    "clinical_validation_status": "clinician_validated"
+  },
+  {
+    "rule_id": "RF_002",
+    "condition": "Potential neurological emergency",
+    "symptoms": ["sudden weakness", "speech difficulty", "facial droop"],
+    "required_combination": "sudden weakness AND (speech difficulty OR facial droop)",
+    "priority": "HIGH",
+    "action": "Redirect to emergency triage immediately.",
+    "message": "POTENTIAL RED FLAG: Immediate clinical assessment recommended.",
+    "clinical_validation_status": "clinician_validated"
+  }
+]

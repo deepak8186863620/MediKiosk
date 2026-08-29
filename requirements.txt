@@ -1,0 +1,11 @@
+google-generativeai
+chromadb
+sentence-transformers
+python-dotenv
+pydantic
+torch
+torchaudio
+transformers
+huggingface_hub
+python-multipart
+pydub

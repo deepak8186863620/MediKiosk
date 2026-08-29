@@ -1,0 +1,28 @@
+[
+  {
+    "complaint": "Chest pain",
+    "question_id": "CP_001",
+    "question": "When did the chest pain start?",
+    "purpose": "Determine onset and duration",
+    "required": true,
+    "question_type": "open_ended",
+    "possible_answers": [],
+    "next_questions": ["CP_002"],
+    "red_flag_relevance": true,
+    "source": "Standard Clinical Guidelines",
+    "review_status": "clinician_validated"
+  },
+  {
+    "complaint": "Chest pain",
+    "question_id": "CP_002",
+    "question": "Does the pain spread anywhere, like your arm, jaw, or back?",
+    "purpose": "Check for radiation of pain",
+    "required": true,
+    "question_type": "multiple_choice",
+    "possible_answers": ["Left arm", "Right arm", "Jaw", "Back", "Neck", "Nowhere"],
+    "next_questions": ["CP_003"],
+    "red_flag_relevance": true,
+    "source": "Standard Clinical Guidelines",
+    "review_status": "clinician_validated"
+  }
+]
