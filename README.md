@@ -1,80 +1,77 @@
-# MediKiosk 🏥
+# MediKiosk — Frontend
 
-MediKiosk is an AI-powered clinical history-taking platform designed for hospitals and clinics. It streamlines the patient intake process by collecting structured clinical histories in multiple Indian languages, identifying critical red flags, and assisting healthcare providers with AI-driven triage and contextual questions.
+React frontend for the MediKiosk patient intake kiosk, built around the corrected
+5-step journey: **Identify → Converse → Scan → Summarize & Route → Consult**.
 
-## 🌟 Key Features Implemented So Far
+> Note: this repo's original backend is Python/FastAPI, not Node/Express — that's
+> fine. This frontend only needs REST endpoints at the paths listed below; it
+> doesn't care what language serves them. A `vite` dev proxy is already set up
+> to forward `/api/*` to `http://localhost:8000`.
 
-### 1. **Multilingual Speech-to-Text (ASR) Pipeline**
-Integrated the **AI4Bharat IndicConformer (600M)** model to accurately transcribe spoken clinical complaints in local Indian languages.
-- **Supported Languages:** English (`en`), Hindi (`hi`), Assamese (`as`), Bodo (`brx`), Manipuri (`mni`), Bengali (`bn`), Nepali (`ne`), Telugu (`te`).
-- Dynamic audio preprocessing: Automatically converts stereo to mono and resamples audio to 16kHz before processing.
-- Optimized initialization: The model loads securely and only once during the FastAPI backend startup to maximize performance. 
+## Setup
 
-### 2. **AI Clinical Conversation & Triage Engine**
-- **Gemini Pro 1.5 Integration:** An intelligent RAG (Retrieval-Augmented Generation) brain that analyzes patient transcripts to extract medical entities, identify missing data, and dynamically ask adaptive follow-up questions.
-- **Symptom Extraction & Disease Classifier:** A Scikit-Learn-based Machine Learning pipeline that maps patient complaints to a standard medical vocabulary and predicts the top 3 most likely medical conditions (Triage Prediction).
-- **RAG for AYUSH & Clinical Guidelines:** Chromadb vector database setup to ground the LLM's adaptive questions securely in validated medical knowledge, avoiding hallucination and preventing autonomous diagnosis.
-
-### 3. **FastAPI Backend Architecture**
-A robust, asynchronous backend handling complex ML model inferences without blocking requests.
-- **Endpoints:**
-  - `POST /api/asr/transcribe` - Accepts audio blobs and language context, returning highly accurate transcriptions.
-  - `POST /api/triage` - Orchestrates the combination of symptom extraction and disease prediction.
-  - `POST /api/gemini` - Secure proxy for frontend interaction with Google's Gemini models.
-- Graceful context managers managing the lifecycle of heavy ML models (IndicConformer & Triage ML models).
-
-### 4. **Structured Data Infrastructure**
-Created a comprehensive JSON schema architecture to standardize patient data for future ABDM/FHIR compatibility.
-- Adaptive Question Schemas
-- Patient History Schemas
-- Prescription & Medical Document Ground Truth definitions
-- Hardcoded Red-Flag rules ensuring deterministic safety nets (bypassing AI unpredictability during emergencies).
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Python 3.9+
-- A valid [Hugging Face Access Token](https://huggingface.co/settings/tokens) (with access to `ai4bharat/indic-conformer-600m-multilingual`)
-- A valid Google Gemini API Key
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/deepak8186863620/MediKiosk.git
-   cd MediKiosk
-   ```
-
-2. **Set up environment variables**
-   Copy the example config and add your keys:
-   ```bash
-   cp .env.example .env
-   ```
-   *Edit `.env` and add your `HF_TOKEN` and `GEMINI_API_KEY`.*
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### Running the Backend
-
-Launch the FastAPI backend server:
 ```bash
-cd backend
-uvicorn main:app --reload
-```
-The API will be available at `http://localhost:8000`.
-
-### Manual ASR Testing
-
-You can easily test the transcription pipeline using the provided CLI tool in the root directory:
-```bash
-python test_asr.py --audio path/to/your/audio.wav --language hindi
+npm install
+npm run dev
 ```
 
-## 📚 Documentation
-For a deeper dive into the ASR implementation, please refer to [docs/AI4BHARAT_ASR.md](./docs/AI4BHARAT_ASR.md).
+Patient kiosk: `http://localhost:5173/`
+Doctor dashboard: `http://localhost:5173/doctor`
 
-## 🛡️ Clinical Safety Note
-This software is intended as an **assistive data-collection tool** for medical professionals. It does not output definitive medical diagnoses. The platform is strictly designed to structure information and highlight clinical red flags for urgent physician review.
+**Network note:** this scaffold was built in a sandboxed environment without
+registry access, so `npm install` wasn't run end-to-end here. It's a standard
+Vite + React + React Router + Axios project — `npm install` on your machine
+will work normally.
+
+## Structure
+
+```
+src/
+  api/client.js          → every backend call the frontend makes, in one file
+  context/SessionContext.jsx  → in-memory patient session (language, chat, docs, summary)
+  components/
+    StepRail.jsx          → the 5-step "Thread" progress rail
+    MicButton.jsx          → dual-mode voice recording button
+    RedFlagOverlay.jsx     → full-screen emergency interrupt
+  pages/
+    LanguageSelect.jsx     → Step 1a
+    Consent.jsx            → Step 1b — ABHA/Aadhaar + audio-explained consent
+    Conversation.jsx       → Step 2 — voice+tap adaptive interview, red-flag check per turn
+    DocumentScan.jsx       → Step 3 — upload/OCR of prior prescriptions & reports
+    SummaryAndWait.jsx     → Step 4 — AI summary review, routing, queue token
+    DoctorDashboard.jsx    → Step 5 — doctor queue + editable summary
+```
+
+## Backend endpoints expected (see `src/api/client.js`)
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/api/patient/verify` | ABHA/Aadhaar lookup, returns `{ patientId, sessionId }` |
+| POST | `/api/asr/transcribe` | audio blob → `{ transcript }` |
+| POST | `/api/gemini/next-question` | conversation history → `{ question, options, done }` |
+| POST | `/api/triage/red-flag-check` | latest answer → `{ isEmergency, reason }` |
+| POST | `/api/documents/upload` | file → `{ summary, date, abnormalValues }` |
+| POST | `/api/history/summarize` | sessionId → `{ summary }` |
+| POST | `/api/history/route` | sessionId → `{ token }` — pushes to HIS/ABDM |
+| GET  | `/api/doctor/queue` | → list of waiting patients |
+| GET  | `/api/doctor/summary/:sessionId` | → `{ summary }` |
+| POST | `/api/doctor/summary/:sessionId/save` | doctor's edited summary |
+
+Every screen has a local fallback if a call fails or the backend isn't running
+yet, so the full patient journey is demoable end-to-end even before the
+backend is wired up — useful for a hackathon walkthrough.
+
+## Design notes
+
+- Palette is a clinical sage/teal + clay-red for alerts — deliberately not the
+  generic warm-cream template look.
+- The step rail's vertical stitched line ("the Thread") is the signature
+  element: it represents the single continuous patient record being sewn
+  together from voice, touch, and paper documents — the fragmentation problem
+  this product solves.
+- Every touch target is ≥64px for kiosk/elderly usability; every question is
+  answerable by voice OR tap, per the official PS requirement.
+- The red-flag check fires after *every* patient turn, not just at the end of
+  the conversation.
+- The doctor's summary fields are `contentEditable` — the AI output is framed
+  as an editable draft, never an autonomous diagnosis.
