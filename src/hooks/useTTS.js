@@ -1,25 +1,16 @@
 /**
  * useTTS — Centralized Text-to-Speech hook for MediKiosk
- * Uses Web Speech API with best-effort Indian language voice matching.
- * Provides autoSpeak, speak, cancel, and speaking state.
+ * Uses Web Speech API. Ensure Windows Language Packs are installed.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-// Maps language code → BCP-47 for Web Speech API
+// Maps our app's language codes to BCP-47 tags
 const TTS_LANG_MAP = {
-  en:  'en-IN',
-  hi:  'hi-IN',
-  te:  'te-IN',
-  ta:  'ta-IN',
-  bn:  'bn-IN',
-  mr:  'mr-IN',
-  as:  'as-IN',
-  mni: 'bn-IN', // fallback — Manipuri not widely available; use Bengali script
-  gu:  'gu-IN',
-  kn:  'kn-IN',
+  en: 'en-IN', hi: 'hi-IN', te: 'te-IN', ta: 'ta-IN',
+  bn: 'bn-IN', mr: 'mr-IN', as: 'as-IN', mni: 'hi-IN'
 };
 
-export function useTTS(language = 'en') {
+export function useTTS(defaultLanguage = 'en') {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const utteranceRef = useRef(null);
@@ -39,75 +30,56 @@ export function useTTS(language = 'en') {
     if (!isSupported || !text) return;
     cancel();
 
-    const lang = TTS_LANG_MAP[langOverride || language] || 'en-IN';
+    const targetLangCode = langOverride || defaultLanguage;
+    const lang = TTS_LANG_MAP[targetLangCode] || 'en-IN';
+    
+    // Very simple execution without chunking to ensure reliability
+    const executeSpeech = () => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = 0.85;
 
-    // Voices may not be loaded yet — wait if needed
-    const doSpeak = () => {
-      // Chrome has a bug where utterances > 15s get cancelled.
-      // We chunk the text by punctuation to avoid this.
-      const chunks = text.match(/[^.!?]+[.!?]*/g) || [text];
-      let currentChunkIndex = 0;
+      // Try to find the best voice
+      const voices = window.speechSynthesis.getVoices();
+      
+      const exactMatch = voices.find(v => v.lang === lang);
+      const prefixMatch = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+      
+      // Fallback name search (e.g. searching for "hindi")
+      const langNames = { hi: 'hindi', te: 'telugu', ta: 'tamil', bn: 'bengali', mr: 'marathi' };
+      const nameMatch = langNames[targetLangCode] 
+        ? voices.find(v => v.name.toLowerCase().includes(langNames[targetLangCode])) 
+        : null;
 
-      const speakNextChunk = () => {
-        if (currentChunkIndex >= chunks.length) {
-          setIsSpeaking(false);
-          return;
-        }
+      const fallbackMatch = voices.find(v => v.lang.startsWith('en'));
 
-        const chunk = chunks[currentChunkIndex].trim();
-        if (!chunk) {
-          currentChunkIndex++;
-          speakNextChunk();
-          return;
-        }
+      if (exactMatch) utterance.voice = exactMatch;
+      else if (prefixMatch) utterance.voice = prefixMatch;
+      else if (nameMatch) utterance.voice = nameMatch;
+      else if (fallbackMatch) utterance.voice = fallbackMatch;
 
-        const utterance = new SpeechSynthesisUtterance(chunk);
-        utterance.lang = lang;
-        utterance.rate = 0.85;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-
-        const voices = window.speechSynthesis.getVoices();
-        
-        const langNameMap = {
-          'hi-IN': 'hindi', 'te-IN': 'telugu', 'ta-IN': 'tamil',
-          'bn-IN': 'bengali', 'mr-IN': 'marathi', 'as-IN': 'assamese'
-        };
-        const searchName = langNameMap[lang] || lang.split('-')[0];
-
-        const match = voices.find(v => v.lang === lang)
-          || voices.find(v => v.lang.startsWith(lang.split('-')[0]))
-          || voices.find(v => v.name.toLowerCase().includes(searchName))
-          || voices.find(v => v.lang.startsWith('en'));
-          
-        if (match) utterance.voice = match;
-
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onerror = () => setIsSpeaking(false);
-        utterance.onend = () => {
-          currentChunkIndex++;
-          speakNextChunk();
-        };
-
-        utteranceRef.current = utterance;
-        window.speechSynthesis.speak(utterance);
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = (e) => {
+        console.error("SpeechSynthesis error:", e);
+        setIsSpeaking(false);
       };
 
-      speakNextChunk();
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
     };
 
     const voices = window.speechSynthesis.getVoices();
     if (voices.length === 0) {
       window.speechSynthesis.onvoiceschanged = () => {
         window.speechSynthesis.onvoiceschanged = null;
-        doSpeak();
+        executeSpeech();
       };
     } else {
-      doSpeak();
+      executeSpeech();
     }
-  }, [isSupported, language, cancel]);
+  }, [defaultLanguage, isSupported, cancel]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => cancel();
   }, [cancel]);
