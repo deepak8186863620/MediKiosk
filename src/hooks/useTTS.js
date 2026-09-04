@@ -68,9 +68,18 @@ export function useTTS(language = 'en') {
         utterance.volume = 1.0;
 
         const voices = window.speechSynthesis.getVoices();
+        
+        const langNameMap = {
+          'hi-IN': 'hindi', 'te-IN': 'telugu', 'ta-IN': 'tamil',
+          'bn-IN': 'bengali', 'mr-IN': 'marathi', 'as-IN': 'assamese'
+        };
+        const searchName = langNameMap[lang] || lang.split('-')[0];
+
         const match = voices.find(v => v.lang === lang)
           || voices.find(v => v.lang.startsWith(lang.split('-')[0]))
+          || voices.find(v => v.name.toLowerCase().includes(searchName))
           || voices.find(v => v.lang.startsWith('en'));
+          
         if (match) utterance.voice = match;
 
         utterance.onstart = () => setIsSpeaking(true);

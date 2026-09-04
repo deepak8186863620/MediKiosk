@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { HeartPulse, HelpCircle, Shield, Globe, FileText, ArrowRight, Activity } from 'lucide-react';
 import { useKiosk } from '../../context/KioskContext';
 import { useTTS } from '../../hooks/useTTS';
+import { useTranslation } from '../../hooks/useTranslation';
 import { useEffect } from 'react';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { speak, isSupported } = useTTS('en');
 
   useEffect(() => {
@@ -31,12 +33,11 @@ export default function WelcomePage() {
             </div>
             
             <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-[1.1] tracking-tight">
-              Skip the queue.<br/>
-              <span className="text-[var(--forest-700)]">Tell the doctor your symptoms now.</span>
+              {t('welcome_title', 'Self-Service Patient Registration & History')}
             </h2>
             
             <p className="text-xl text-gray-500 font-medium mb-10 max-w-lg leading-relaxed">
-              Use this kiosk to record your medical history in your native language before entering the doctor's cabin.
+              {t('welcome_subtitle', 'Save time before seeing the doctor by entering your symptoms directly.')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 mb-10">
@@ -45,8 +46,9 @@ export default function WelcomePage() {
                 className="btn-primary text-xl px-10 py-5 rounded-xl shadow-lg shadow-[var(--forest-500)]/20 flex items-center justify-center gap-3 w-full sm:w-auto transform hover:-translate-y-1 transition-all"
                 id="btn-start"
               >
-                Start Registration <ArrowRight size={24} />
+                {t('start', 'Start Registration Now →')} <ArrowRight size={24} />
               </button>
+
             </div>
             
             <div className="flex items-center gap-3 text-gray-500 text-sm font-medium bg-gray-50 p-4 rounded-lg border border-gray-100 max-w-lg">
