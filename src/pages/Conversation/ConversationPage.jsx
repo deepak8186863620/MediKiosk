@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Mic, Hand, RefreshCw, CheckCircle2, AlertTriangle, PhoneCall, Loader2, CheckCheck } from 'lucide-react';
+import { ArrowLeft, Mic, Hand, RefreshCw, CheckCircle2, AlertTriangle, PhoneCall, Loader2, CheckCheck, Volume2 } from 'lucide-react';
 import { useKiosk } from '../../context/KioskContext';
 import ProgressIndicator from '../../components/ProgressIndicator/ProgressIndicator';
 import VoiceRecorder from '../../components/VoiceRecorder/VoiceRecorder';
@@ -9,6 +9,7 @@ import AudioButton from '../../components/AudioButton/AudioButton';
 import { transcribeAudio, processClinicalAnswer } from '../../services/api';
 import { demoTranscribe, demoGetNextQuestion, IS_DEMO } from '../../services/demo';
 import { getLanguageByCode } from '../../config/languages';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const INITIAL_QUESTION = {
   question: 'What problem are you having today? Please describe it in your own words.',
@@ -17,6 +18,7 @@ const INITIAL_QUESTION = {
 
 export default function ConversationPage() {
   const navigate = useNavigate();
+  const { t, language: currentLanguage } = useTranslation();
   const {
     chiefComplaint, patientInfo, language,
     sessionId, setSessionId,
@@ -54,13 +56,13 @@ export default function ConversationPage() {
     return (
       <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center px-8 text-center">
         <CheckCheck size={64} className="text-emerald-500 mb-6" />
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">History Collected!</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('History Collected!', 'History Collected!')}</h1>
         <p className="text-lg text-slate-600 mb-8 max-w-sm">
-          Thank you. We have recorded your health information. You can now review it or add medical documents.
+          {t('Thank you. We have recorded your health information. You can now review it or add medical documents.', 'Thank you. We have recorded your health information. You can now review it or add medical documents.')}
         </p>
         <div className="flex gap-4">
-          <button onClick={() => navigate('/documents')} className="btn-secondary">Add Medical Papers</button>
-          <button onClick={() => navigate('/review')} className="btn-primary">Review & Continue →</button>
+          <button onClick={() => navigate('/documents')} className="btn-secondary">{t('Add Medical Papers', 'Add Medical Papers')}</button>
+          <button onClick={() => navigate('/review')} className="btn-primary">{t('Review & Continue →', 'Review & Continue →')}</button>
         </div>
       </div>
     );
@@ -76,12 +78,12 @@ export default function ConversationPage() {
         result = await demoTranscribe();
       } else {
         const langConfig = getLanguageByCode(language);
-        result = await transcribeAudio(blob, langConfig.name.toLowerCase());
+        result = await transcribeAudio(blob, langConfig.asrCode || langConfig.name.toLowerCase());
       }
       setTranscript(result.transcript || result.text || '');
       setVoicePhase('confirm');
     } catch (err) {
-      setError('Sorry, we could not understand the recording. Please try again or use tap instead.');
+      setError(t('Sorry, we could not understand the recording. Please try again or use tap instead.', 'Sorry, we could not understand the recording. Please try again or use tap instead.'));
     } finally {
       setIsLoading(false);
     }
@@ -132,7 +134,7 @@ export default function ConversationPage() {
       setCurrentQuestion({ question: nextQ.question, options: nextQ.options || null });
       setStep(s => s + 1);
     } catch (err) {
-      setError('We could not save your answer. Please try again or contact staff.');
+      setError(t('We could not save your answer. Please try again or contact staff.', 'We could not save your answer. Please try again or contact staff.'));
     } finally {
       setIsLoading(false);
     }
@@ -142,9 +144,9 @@ export default function ConversationPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex flex-col">
       <header className="w-full px-8 py-5 flex items-center justify-between border-b border-slate-100 bg-white/80">
         <button onClick={() => navigate('/chief-complaint')} className="flex items-center gap-2 text-slate-500 hover:text-slate-800">
-          <ArrowLeft size={20} /> Back
+          <ArrowLeft size={20} /> {t('back', 'Back')}
         </button>
-        <span className="text-lg font-semibold text-slate-700">Health Questions</span>
+        <span className="text-lg font-semibold text-slate-700">{t('Health Questions', 'Health Questions')}</span>
         {isDemoMode && <span className="badge badge-demo">Demo</span>}
       </header>
 
@@ -154,7 +156,7 @@ export default function ConversationPage() {
         {/* Progress counter */}
         {step > 0 && (
           <p className="text-center text-sm text-slate-400 mb-4">
-            Question {step + 1} — Taking your health history
+            {t('Question', 'Question')} {step + 1} — {t('Taking your health history', 'Taking your health history')}
           </p>
         )}
 
@@ -169,7 +171,7 @@ export default function ConversationPage() {
                 selectedOption={selectedOption}
               />
             </div>
-            <AudioButton text={currentQuestion.question} label="" size="md" />
+            <AudioButton text={currentQuestion.question} label={t('Listen', 'Listen')} size="md" autoSpeak={true} />
           </div>
         </div>
 

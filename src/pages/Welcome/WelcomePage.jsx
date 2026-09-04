@@ -1,9 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { HeartPulse, HelpCircle, Shield, Globe, FileText, ArrowRight, Activity } from 'lucide-react';
 import { useKiosk } from '../../context/KioskContext';
+import { useTTS } from '../../hooks/useTTS';
+import { useEffect } from 'react';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
+  const { speak, isSupported } = useTTS('en');
+
+  useEffect(() => {
+    // Auto-greet the patient on kiosk startup
+    const timer = setTimeout(() => {
+      speak("Welcome to MediKiosk. Please tap Start Registration to begin.", "en");
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [speak]);
 
   return (
     <div className="page-bg min-h-screen flex flex-col bg-slate-50">

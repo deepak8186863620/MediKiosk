@@ -347,3 +347,85 @@ async def process_clinical_answer(req: ClinicalAnswerRequest):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gemini API Error: {str(e)}")
+
+# --- Phase 4: Missing Endpoints ---
+
+# In-memory storage for hackathon MVP
+SESSIONS = {}
+DOCTOR_QUEUE = []
+
+class SessionStartRequest(BaseModel):
+    name: str
+    age: str
+    gender: str
+    phone: Optional[str] = ""
+    abha_id: Optional[str] = ""
+    patient_type: str
+
+@app.post("/api/session/start")
+async def start_session(req: SessionStartRequest):
+    session_id = str(uuid.uuid4())
+    SESSIONS[session_id] = req.dict()
+    return {"session_id": session_id}
+
+@app.post("/api/documents/process")
+async def process_document(
+    document: UploadFile = File(...),
+    document_type: str = Form("other"),
+    session_id: str = Form(...)
+):
+    try:
+        content = await document.read()
+        image_b64 = base64.b64encode(content).decode("utf-8")
+        mime_type = document.content_type or "image/jpeg"
+        
+        try:
+            from services.ocr import extract_document_data
+        except ImportError:
+            try:
+                from backend.services.ocr import extract_document_data
+            except ImportError:
+                return {"success": False, "error": "OCR module not found"}
+            
+        extracted = extract_document_data(image_b64, mime_type, document_type)
+        return {"success": True, "document_id": str(uuid.uuid4()), "extracted": extracted}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Document processing failed: {str(e)}")
+
+class SubmitHistoryRequest(BaseModel):
+    session_id: str
+    patient: dict
+    conversationHistory: list = []
+    structuredHistory: dict = {}
+    documents: list = []
+    ayushHistory: dict = {}
+
+@app.post("/api/history/submit")
+async def submit_history(req: SubmitHistoryRequest):
+    summary = req.structuredHistory
+    if req.ayushHistory:
+        summary["ayush"] = req.ayushHistory
+        
+    DOCTOR_QUEUE.append({
+        "session_id": req.session_id,
+        "patient": req.patient,
+        "summary": summary,
+        "status": "waiting",
+        "timestamp": "Just now"
+    })
+    return {"success": True, "session_id": req.session_id, "summary": summary}
+
+@app.get("/api/doctor/queue")
+async def get_doctor_queue():
+    return {"queue": DOCTOR_QUEUE}
+
+@app.get("/api/history/summary")
+async def get_history_summary(session_id: str):
+    for entry in DOCTOR_QUEUE:
+        if entry["session_id"] == session_id:
+            return {"summary": entry["summary"]}
+    raise HTTPException(status_code=404, detail="Summary not found")
+
+@app.post("/api/ayush/analyze")
+async def analyze_ayush(history: dict):
+    return {"prakriti_dosha": "Vata", "vikriti": "Pitta", "recommendations": ["Eat warm food"]}

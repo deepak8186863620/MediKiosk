@@ -1,78 +1,130 @@
 export const dictionary = {
   en: {
-    // General
-    back: "Back",
-    continue: "Continue",
-    start: "Start Registration Now →",
-    
-    // Welcome Page
+    back: "Back", continue: "Continue", start: "Start Registration Now →",
     welcome_title: "Self-Service Patient Registration & History",
     welcome_subtitle: "Save time before seeing the doctor by entering your symptoms directly.",
     welcome_privacy: "All medical data is encrypted and securely sent directly to your doctor.",
-    
-    // Chief Complaint Page
-    cc_header: "Your Problem Today",
-    cc_title: "What problem are you having today?",
+    cc_header: "Your Problem Today", cc_title: "What problem are you having today?",
     cc_subtitle: "Choose how you would like to tell us.",
-    cc_select: "Select all that apply:",
-    cc_or: "Describe your problem:",
+    cc_select: "Select all that apply:", cc_or: "Describe your problem:",
     cc_placeholder: "Type your problem here...",
-    cc_speak_btn: "I want to speak",
-    cc_speak_sub: "Tell us in your own words",
-    cc_tap_btn: "I want to tap",
-    cc_tap_sub: "Choose from a visual list",
+    cc_speak_btn: "I want to speak", cc_speak_sub: "Tell us in your own words",
+    cc_tap_btn: "I want to tap", cc_tap_sub: "Choose from a visual list",
     change_mode: "Change Mode",
-    
-    // Patient Info Page
-    pi_header: "Patient Information",
-    pi_title: "Please verify your details",
-    pi_name: "Full Name",
-    pi_age: "Age (Years)",
-    pi_gender: "Gender",
-    pi_phone: "Mobile Number",
-    
-    // Navbar
-    nav_home: "Home",
-    nav_ayush: "AYUSH Info",
-    nav_doctor: "Doctor Portal",
-    nav_staff: "Staff Assistance"
+    pi_header: "Patient Information", pi_title: "Please verify your details",
+    pi_name: "Full Name", pi_age: "Age (Years)", pi_gender: "Gender", pi_phone: "Mobile Number",
+    nav_home: "Home", nav_ayush: "AYUSH Info", nav_doctor: "Doctor Portal", nav_staff: "Staff Assistance"
   },
   hi: {
-    // General
-    back: "पीछे",
-    continue: "आगे बढ़ें",
-    start: "पंजीकरण शुरू करें →",
-    
-    // Welcome Page
+    back: "पीछे", continue: "आगे बढ़ें", start: "पंजीकरण शुरू करें →",
     welcome_title: "स्वयं-सेवा रोगी पंजीकरण और इतिहास",
-    welcome_subtitle: "अपने लक्षण सीधे दर्ज करके डॉक्टर से मिलने से पहले समय बचाएं।",
-    welcome_privacy: "सभी मेडिकल डेटा एन्क्रिप्टेड है और सुरक्षित रूप से सीधे आपके डॉक्टर को भेजा जाता है।",
-    
-    // Chief Complaint Page
-    cc_header: "आज आपकी समस्या",
-    cc_title: "आज आपको क्या समस्या हो रही है?",
+    welcome_subtitle: "डॉक्टर से मिलने से पहले अपने लक्षण सीधे दर्ज करके समय बचाएं।",
+    welcome_privacy: "सभी मेडिकल डेटा सुरक्षित है और सीधे आपके डॉक्टर को भेजा जाता है।",
+    cc_header: "आज आपकी समस्या", cc_title: "आज आपको क्या समस्या हो रही है?",
     cc_subtitle: "चुनें कि आप हमें कैसे बताना चाहेंगे।",
-    cc_select: "जो लागू हो उसे चुनें:",
-    cc_or: "अपनी समस्या का वर्णन करें:",
+    cc_select: "जो लागू हो उसे चुनें:", cc_or: "अपनी समस्या का वर्णन करें:",
     cc_placeholder: "अपनी समस्या यहाँ टाइप करें...",
-    cc_speak_btn: "मैं बोलना चाहता हूँ",
-    cc_speak_sub: "हमें अपने शब्दों में बताएं",
-    cc_tap_btn: "मैं टैप करना चाहता हूँ",
-    cc_tap_sub: "दृश्य सूची से चुनें",
+    cc_speak_btn: "मैं बोलना चाहता हूँ", cc_speak_sub: "हमें अपने शब्दों में बताएं",
+    cc_tap_btn: "मैं टैप करना चाहता हूँ", cc_tap_sub: "दृश्य सूची से चुनें",
     change_mode: "मोड बदलें",
-    
-    // Patient Info Page
-    pi_header: "रोगी की जानकारी",
-    pi_title: "कृपया अपना विवरण सत्यापित करें",
-    pi_name: "पूरा नाम",
-    pi_age: "आयु (वर्ष)",
-    pi_gender: "लिंग",
-    pi_phone: "मोबाइल नंबर",
-    
-    // Navbar
-    nav_home: "होम",
-    nav_ayush: "आयुष जानकारी",
-    nav_doctor: "डॉक्टर पोर्टल",
-    nav_staff: "स्टाफ सहायता"
+    pi_header: "रोगी की जानकारी", pi_title: "कृपया अपना विवरण सत्यापित करें",
+    pi_name: "पूरा नाम", pi_age: "आयु (वर्ष)", pi_gender: "लिंग", pi_phone: "मोबाइल नंबर",
+    nav_home: "होम", nav_ayush: "आयुष जानकारी", nav_doctor: "डॉक्टर पोर्टल", nav_staff: "स्टाफ सहायता"
+  },
+  te: {
+    back: "వెనుకకు", continue: "కొనసాగించు", start: "నమోదు ప్రారంభించండి →",
+    welcome_title: "రోగి నమోదు మరియు చరిత్ర",
+    welcome_subtitle: "డాక్టర్‌ను చూసే ముందు మీ లక్షణాలను నమోదు చేసి సమయం ఆదా చేసుకోండి.",
+    welcome_privacy: "అన్ని వైద్య డేటా సురక్షితం మరియు నేరుగా డాక్టర్‌కు పంపబడుతుంది.",
+    cc_header: "మీ సమస్య", cc_title: "ఈ రోజు మీకు ఉన్న సమస్య ఏమిటి?",
+    cc_subtitle: "మీరు ఎలా చెప్పాలనుకుంటున్నారో ఎంచుకోండి.",
+    cc_select: "వర్తించేవి ఎంచుకోండి:", cc_or: "సమస్యను వివరించండి:",
+    cc_placeholder: "మీ సమస్యను ఇక్కడ టైప్ చేయండి...",
+    cc_speak_btn: "మాట్లాడతాను", cc_speak_sub: "మీ సొంత మాటలలో చెప్పండి",
+    cc_tap_btn: "ట్యాప్ చేస్తాను", cc_tap_sub: "జాబితా నుండి ఎంచుకోండి",
+    change_mode: "మోడ్ మార్చు",
+    pi_header: "రోగి సమాచారం", pi_title: "దయచేసి వివరాలను ధృవీకరించండి",
+    pi_name: "పూర్తి పేరు", pi_age: "వయస్సు", pi_gender: "లింగం", pi_phone: "మొబైల్ నంబర్",
+    nav_home: "హోమ్", nav_ayush: "ఆయుష్", nav_doctor: "డాక్టర్ పోర్టల్", nav_staff: "సిబ్బంది సహాయం"
+  },
+  ta: {
+    back: "பின்னே", continue: "தொடர்க", start: "பதிவை தொடங்குங்கள் →",
+    welcome_title: "நோயாளி பதிவு மற்றும் வரலாறு",
+    welcome_subtitle: "உங்கள் அறிகுறிகளை நேரடியாக உள்ளிட்டு நேரத்தை மிச்சப்படுத்துங்கள்.",
+    welcome_privacy: "அனைத்து மருத்துவ தரவுகளும் பாதுகாப்பாக மருத்துவருக்கு அனுப்பப்படும்.",
+    cc_header: "இன்று உங்கள் பிரச்சனை", cc_title: "இன்று உங்களுக்கு என்ன பிரச்சனை?",
+    cc_subtitle: "எப்படி சொல்ல விரும்புகிறீர்கள் என்பதைத் தேர்வுசெய்க.",
+    cc_select: "பொருத்தமானவற்றை தேர்வுசெய்க:", cc_or: "உங்கள் பிரச்சனையை விவரிக்கவும்:",
+    cc_placeholder: "உங்கள் பிரச்சனையை இங்கே தட்டச்சு செய்க...",
+    cc_speak_btn: "பேச விரும்புகிறேன்", cc_speak_sub: "உங்கள் சொந்த வார்த்தைகளில் சொல்லுங்கள்",
+    cc_tap_btn: "தட்ட விரும்புகிறேன்", cc_tap_sub: "பட்டியலிலிருந்து தேர்வுசெய்க",
+    change_mode: "மாற்று",
+    pi_header: "நோயாளி தகவல்", pi_title: "உங்கள் விவரங்களை சரிபார்க்கவும்",
+    pi_name: "முழு பெயர்", pi_age: "வயது", pi_gender: "பாலினம்", pi_phone: "தொலைபேசி எண்",
+    nav_home: "முகப்பு", nav_ayush: "ஆயுஷ்", nav_doctor: "மருத்துவர் தளம்", nav_staff: "உதவி"
+  },
+  bn: {
+    back: "পিছনে", continue: "চালিয়ে যান", start: "নিবন্ধন শুরু করুন →",
+    welcome_title: "রোগী নিবন্ধন ও ইতিহাস",
+    welcome_subtitle: "আপনার লক্ষণগুলি সরাসরি প্রবেশ করে সময় বাঁচান।",
+    welcome_privacy: "সমস্ত মেডিকেল ডেটা সুরক্ষিত এবং আপনার ডাক্তারকে পাঠানো হবে।",
+    cc_header: "আপনার সমস্যা", cc_title: "আজ আপনার কী সমস্যা হচ্ছে?",
+    cc_subtitle: "আপনি কীভাবে বলতে চান তা চয়ন করুন।",
+    cc_select: "প্রযোজ্যগুলি নির্বাচন করুন:", cc_or: "আপনার সমস্যার বর্ণনা দিন:",
+    cc_placeholder: "আপনার সমস্যা এখানে টাইপ করুন...",
+    cc_speak_btn: "আমি বলতে চাই", cc_speak_sub: "আপনার নিজের কথায় বলুন",
+    cc_tap_btn: "আমি ট্যাপ করতে চাই", cc_tap_sub: "তালিকা থেকে চয়ন করুন",
+    change_mode: "মোড পরিবর্তন করুন",
+    pi_header: "রোগীর তথ্য", pi_title: "অনুগ্রহ করে আপনার বিবরণ যাচাই করুন",
+    pi_name: "পুরো নাম", pi_age: "বয়স", pi_gender: "লিঙ্গ", pi_phone: "মোবাইল নম্বর",
+    nav_home: "হোম", nav_ayush: "আয়ুষ", nav_doctor: "ডাক্তার পোর্টাল", nav_staff: "সাহায্য"
+  },
+  mr: {
+    back: "मागे", continue: "पुढे जा", start: "नोंदणी सुरू करा →",
+    welcome_title: "रुग्ण नोंदणी आणि इतिहास",
+    welcome_subtitle: "आपली लक्षणे थेट प्रविष्ट करून वेळ वाचवा.",
+    welcome_privacy: "सर्व वैद्यकीय डेटा सुरक्षित आहे आणि आपल्या डॉक्टरांना पाठविला जाईल.",
+    cc_header: "आपली आजची समस्या", cc_title: "आज आपल्याला काय समस्या आहे?",
+    cc_subtitle: "आपल्याला कसे सांगायचे आहे ते निवडा.",
+    cc_select: "लागू होणारे निवडा:", cc_or: "आपल्या समस्येचे वर्णन करा:",
+    cc_placeholder: "आपली समस्या येथे टाइप करा...",
+    cc_speak_btn: "मला बोलायचे आहे", cc_speak_sub: "आपल्या स्वतःच्या शब्दात सांगा",
+    cc_tap_btn: "मला टॅप करायचे आहे", cc_tap_sub: "यादीतून निवडा",
+    change_mode: "मोड बदला",
+    pi_header: "रुग्णाची माहिती", pi_title: "कृपया आपले तपशील तपासा",
+    pi_name: "पूर्ण नाव", pi_age: "वय", pi_gender: "लिंग", pi_phone: "मोबाइल नंबर",
+    nav_home: "मुख्यपृष्ठ", nav_ayush: "आयुष", nav_doctor: "डॉक्टर पोर्टल", nav_staff: "मदत"
+  },
+  as: {
+    back: "পিছলৈ", continue: "আগবাঢ়ক", start: "পঞ্জীয়ন আৰম্ভ কৰক →",
+    welcome_title: "ৰোগী পঞ্জীয়ন আৰু ইতিহাস",
+    welcome_subtitle: "আপোনাৰ লক্ষণসমূহ পোনপটীয়াকৈ প্ৰৱেশ কৰি সময় ৰাহি কৰক।",
+    welcome_privacy: "সকলো চিকিৎসা তথ্য সুৰক্ষিত আৰু আপোনাৰ চিকিৎসকক পঠিওৱা হ'ব।",
+    cc_header: "আপোনাৰ সমস্যা", cc_title: "আজি আপোনাৰ কি সমস্যা হৈছে?",
+    cc_subtitle: "আপুনি কেনেকৈ ক'ব বিচাৰে বাছক।",
+    cc_select: "প্ৰযোজ্যসমূহ বাছক:", cc_or: "আপোনাৰ সমস্যাৰ বিৱৰণ দিয়ক:",
+    cc_placeholder: "আপোনাৰ সমস্যা ইয়াত টাইপ কৰক...",
+    cc_speak_btn: "মই ক'ব বিচাৰোঁ", cc_speak_sub: "আপোনাৰ নিজৰ ভাষাত কওক",
+    cc_tap_btn: "মই টেপ কৰিব বিচাৰোঁ", cc_tap_sub: "তালিকাৰ পৰা বাছক",
+    change_mode: "ম'ড সলনি কৰক",
+    pi_header: "ৰোগীৰ তথ্য", pi_title: "অনুগ্ৰহ কৰি আপোনাৰ সবিশেষ পৰীক্ষা কৰক",
+    pi_name: "সম্পূৰ্ণ নাম", pi_age: "বয়স", pi_gender: "লিংগ", pi_phone: "ম'বাইল নম্বৰ",
+    nav_home: "হ'ম", nav_ayush: "আয়ুষ", nav_doctor: "চিকিৎসকৰ পৰ্টেল", nav_staff: "কৰ্মচাৰীৰ সহায়"
+  },
+  mni: {
+    back: "Piche", continue: "Makhata chatpa", start: "Registration houro →",
+    welcome_title: "Anaba Registration amadi History",
+    welcome_subtitle: "Nahan gi symptom sing thajinbana matam kanbiyu.",
+    welcome_privacy: "Medical data pumnamak ngak-senle amadi doctor da tharak-i.",
+    cc_header: "Ngangi problem", cc_title: "Ngasidamak ngangi kari problem leige?",
+    cc_subtitle: "Kamaina hairakni haina khallo.",
+    cc_select: "Chunaba sing khallu:", cc_or: "Ngangi problem sandokna haiyuu:",
+    cc_placeholder: "Ngangi problem mada type touro...",
+    cc_speak_btn: "Ngangjage", cc_speak_sub: "Eigi waheida haijage",
+    cc_tap_btn: "Tap toujage", cc_tap_sub: "List tagi khanjage",
+    change_mode: "Mode onthok-pa",
+    pi_header: "Anaba gi marol", pi_title: "Ngangi detail sing verify toubiyu",
+    pi_name: "Ming", pi_age: "Chahi", pi_gender: "Nupa/Nupi", pi_phone: "Phone",
+    nav_home: "Home", nav_ayush: "AYUSH Info", nav_doctor: "Doctor Portal", nav_staff: "Staff help"
   }
 };

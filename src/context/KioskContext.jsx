@@ -16,8 +16,10 @@ export function KioskProvider({ children }) {
   });
   const [chiefComplaint, setChiefComplaint] = useState('');
   const [sessionId, setSessionId] = useState(null);
+  const [submittedSessionId, setSubmittedSessionId] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [structuredHistory, setStructuredHistory] = useState(null);
+  const [ayushHistory, setAyushHistory] = useState({});
   const [documents, setDocuments] = useState([]);
   const [isDemoMode, setIsDemoMode] = useState(
     import.meta.env.VITE_DEMO_MODE === 'true'
@@ -33,8 +35,10 @@ export function KioskProvider({ children }) {
     setPatientInfo({ name: '', age: '', gender: '', phone: '', abha_id: '', patient_type: 'new' });
     setChiefComplaint('');
     setSessionId(null);
+    setSubmittedSessionId(null);
     setConversationHistory([]);
     setStructuredHistory(null);
+    setAyushHistory({});
     setDocuments([]);
     setRedFlag(false);
   }
@@ -46,8 +50,10 @@ export function KioskProvider({ children }) {
       patientInfo, setPatientInfo,
       chiefComplaint, setChiefComplaint,
       sessionId, setSessionId,
+      submittedSessionId, setSubmittedSessionId,
       conversationHistory, addConversationEntry,
       structuredHistory, setStructuredHistory,
+      ayushHistory, setAyushHistory,
       documents, setDocuments,
       isDemoMode, setIsDemoMode,
       redFlag, setRedFlag,

@@ -1,14 +1,22 @@
+/**
+ * useTranslation — Multilingual translation hook for MediKiosk
+ * Returns a t(key) function scoped to the current KioskContext language.
+ * Falls back to English if a translation is missing.
+ */
+import { useCallback } from 'react';
 import { useKiosk } from '../context/KioskContext';
 import { dictionary } from '../translations/dictionary';
 
 export function useTranslation() {
-  const { language } = useKiosk(); // e.g., 'en', 'hi'
+  const { language } = useKiosk();
 
-  const t = (key) => {
-    // Fallback to english if the language or key is missing
+  const t = useCallback((key, fallback) => {
     const langDict = dictionary[language] || dictionary['en'];
-    return langDict[key] || dictionary['en'][key] || key;
-  };
+    const enDict   = dictionary['en'];
+    return langDict?.[key] ?? enDict?.[key] ?? fallback ?? key;
+  }, [language]);
 
   return { t, language };
 }
+
+export default useTranslation;

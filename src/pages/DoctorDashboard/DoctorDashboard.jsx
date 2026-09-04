@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   AlertTriangle, CheckCircle2, X, Save, Pencil,
   User, Heart, FileText, ChevronRight, ArrowLeft,
-  ClipboardList, Stethoscope
+  ClipboardList, Stethoscope, Leaf
 } from 'lucide-react';
 import { useKiosk } from '../../context/KioskContext';
 import SummaryCard from '../../components/SummaryCard/SummaryCard';
@@ -242,19 +242,35 @@ export default function DoctorDashboard() {
               )}
             </div>
 
-            {/* AYUSH coming soon */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-5">
-              <h3 className="text-base font-bold text-emerald-800 mb-1">🌿 AYUSH Mode</h3>
-              <p className="text-sm text-emerald-700 mb-3">
-                Prakriti, Vikriti, Agni and traditional history sections coming soon.
-              </p>
-              <button
-                onClick={() => navigate('/ayush')}
-                className="flex items-center gap-1 text-emerald-700 text-sm font-medium hover:underline"
-              >
-                Preview <ChevronRight size={14} />
-              </button>
-            </div>
+            {/* AYUSH Assessment */}
+            {summary.ayush && Object.keys(summary.ayush).length > 0 ? (
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-5">
+                <h3 className="text-base font-bold text-emerald-800 mb-3 flex items-center gap-2">
+                  <Leaf size={18} /> AYUSH Assessment
+                </h3>
+                <div className="space-y-3">
+                  {Object.entries(summary.ayush).map(([key, val]) => (
+                    <div key={key} className="border-b border-emerald-100/50 pb-2 last:border-0 last:pb-0">
+                      <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-0.5">{key.replace('_', ' ')}</p>
+                      <p className="text-sm font-medium text-emerald-900 capitalize">{val.replace('_', ' ')}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-5">
+                <h3 className="text-base font-bold text-emerald-800 mb-1">🌿 AYUSH Mode</h3>
+                <p className="text-sm text-emerald-700 mb-3">
+                  Patient did not complete Dashavidha Pariksha.
+                </p>
+                <button
+                  onClick={() => navigate('/ayush')}
+                  className="flex items-center gap-1 text-emerald-700 text-sm font-medium hover:underline"
+                >
+                  View Module <ChevronRight size={14} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
