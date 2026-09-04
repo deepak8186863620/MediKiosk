@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Primary palette — Professional Clinical Green */
+    --forest-950: #022c22;
+    --forest-900: #064e3b;
+    --forest-800: #065f46;
+    --forest-700: #047857;
+    --forest-600: #059669;
+    --forest-500: #10b981;
+    
+    /* Accent palette — Saffron/Orange for alerts & secondary actions */
+    --saffron-600: #ea580c;
+    --saffron-500: #f97316;
+    --saffron-100: #ffedd5;
+
+    /* Neutrals - Stark, clean clinical look */
+    --surface-bg:  #f8fafc; /* Very light slate, almost white */
+    --surface-card: #ffffff;
+    
+    /* Text */
+    --text-primary:   #0f172a;
+    --text-secondary: #334155;
+    --text-muted:     #64748b;
+    
+    /* Borders */
+    --border: #cbd5e1;
+    --border-light: #e2e8f0;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--surface-bg);
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  /* Large touch targets for accessibility */
+  button, [role="button"] {
+    min-height: 3.5rem;
+    cursor: pointer;
+  }
+
+  input, select, textarea {
+    font-family: inherit;
+  }
+}
+
+@layer utilities {
+  /* Clean, structured layout */
+  .page-bg {
+    min-height: 100vh;
+    background-color: var(--surface-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kiosk-container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Solid, corporate header */
+  .kiosk-header {
+    width: 100%;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border-bottom: 2px solid var(--border-light);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  /* Clean logo text */
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .logo-icon {
+    color: var(--forest-700);
+  }
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--forest-900);
+    letter-spacing: -0.02em;
+  }
+
+  /* Flat, utilitarian cards */
+  .card {
+    background: var(--surface-card);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+  }
+
+  .card-interactive {
+    background: var(--surface-card);
+    border-radius: 0.75rem;
+    border: 2px solid var(--border-light);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+
+  .card-interactive:hover, .card-interactive:focus {
+    border-color: var(--forest-600);
+    background-color: #f0fdf4; /* Very light green tint */
+  }
+
+  .card-interactive.selected {
+    border-color: var(--forest-700);
+    background-color: #ecfdf5;
+    box-shadow: 0 0 0 1px var(--forest-700);
+  }
+
+  /* Solid, high-contrast buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background-color: var(--forest-700);
+    color: white;
+    border: none;
+    transition: background-color 0.15s ease;
+  }
+  .btn-primary:hover { background-color: var(--forest-800); }
+  .btn-primary:active { background-color: var(--forest-900); }
+  .btn-primary:disabled { background-color: #94a3b8; cursor: not-allowed; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    background-color: white;
+    color: var(--forest-800);
+    border: 2px solid var(--forest-700);
+    transition: all 0.15s ease;
+  }
+  .btn-secondary:hover {
+    background-color: #f0fdf4;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .btn-ghost:hover {
+    background-color: #f1f5f9;
+    border-color: var(--border-light);
+  }
+
+  /* Standard inputs */
+  .input-large {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #94a3b8;
+    font-size: 1.125rem;
+    background: white;
+    color: var(--text-primary);
+  }
+  .input-large:focus {
+    outline: none;
+    border-color: var(--forest-600);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+  }
+
+  /* Minimalist Hero Section for Welcome */
+  .hero-band {
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+
+  .hero-band h1 { color: var(--forest-900); }
+  .hero-band p { color: var(--text-secondary); }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .badge-demo { background: var(--saffron-100); color: var(--saffron-600); border: 1px solid #fdba74; }
+
+  /* Remove flashy animations, keep it strictly functional */
+  .animate-fade-in { animation: none; }
+  .animate-slide-up { animation: none; }
+  .animate-scale-in { animation: none; }
+  .shimmer-text { background: none; -webkit-text-fill-color: initial; color: var(--forest-700); }
+
+  /* No more gamosa strip or lotus bg, keep it clinical */
+  .gamosa-strip { display: none; }
+  .lotus-bg { display: none; }
+}

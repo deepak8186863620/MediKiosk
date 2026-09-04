@@ -49,6 +49,7 @@ src/
 | POST | `/api/patient/verify` | ABHA/Aadhaar lookup, returns `{ patientId, sessionId }` |
 | POST | `/api/asr/transcribe` | audio blob → `{ transcript }` |
 | POST | `/api/gemini/next-question` | conversation history → `{ question, options, done }` |
+| POST | `/api/clinical/answer` | Multilingual clinical conversation with Gemini → `{ question, options, red_flag, complete, summary }` |
 | POST | `/api/triage/red-flag-check` | latest answer → `{ isEmergency, reason }` |
 | POST | `/api/documents/upload` | file → `{ summary, date, abnormalValues }` |
 | POST | `/api/history/summarize` | sessionId → `{ summary }` |
@@ -60,6 +61,10 @@ src/
 Every screen has a local fallback if a call fails or the backend isn't running
 yet, so the full patient journey is demoable end-to-end even before the
 backend is wired up — useful for a hackathon walkthrough.
+
+## Recent Features
+- **Premium Frontend Portals**: Custom navigation for dedicated AYUSH and Clinical pathways, ensuring consistent, accessible, and responsive UI/UX across all registration and clinical history-taking flows.
+- **Multilingual Support**: Fully integrated with the new `/api/clinical/answer` endpoint for real-time translation and clinical reasoning in 8+ Indian languages.
 
 ## Design notes
 

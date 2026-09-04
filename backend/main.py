@@ -240,3 +240,110 @@ async def complete_triage(req: TranscriptRequest):
         "extractedSymptoms": symptoms,
         "prediction": prediction
     }
+
+# --- Step 4: Multilingual Clinical Conversation ---
+
+class PatientInfo(BaseModel):
+    name: str
+    age: str
+    gender: str
+    phone: Optional[str] = ""
+    abha_id: Optional[str] = ""
+    patient_type: str
+
+class ConversationEntry(BaseModel):
+    turn: int
+    question: str
+    answer: str
+    mode: str
+
+class ClinicalAnswerRequest(BaseModel):
+    session_id: Optional[str] = None
+    question: str
+    answer: str
+    turn: int
+    patient: PatientInfo
+    language: str
+    history: Optional[List[ConversationEntry]] = []
+
+@app.post("/api/clinical/answer")
+async def process_clinical_answer(req: ClinicalAnswerRequest):
+    """Processes a patient's answer and generates the next question using Gemini, in the selected language."""
+    
+    language_map = {
+        "hi": "Hindi (Devanagari script)",
+        "te": "Telugu",
+        "ta": "Tamil",
+        "bn": "Bengali",
+        "mr": "Marathi",
+        "as": "Assamese",
+        "mni": "Manipuri",
+        "en": "English"
+    }
+    
+    target_language = language_map.get(req.language, "English")
+    
+    system_instruction = f"""
+    You are a clinical history taking assistant for an Indian hospital kiosk.
+    Your job is to collect the patient's medical history by asking one question at a time.
+    DO NOT diagnose the patient. Only ask questions to understand their symptoms.
+
+    The patient's chosen language is: {target_language}.
+    CRITICAL: You MUST output your 'question' and 'options' in EXACTLY this language ({target_language}).
+    
+    Your response MUST be a valid JSON object matching this schema:
+    {{
+      "question": "The next question to ask the patient (translated to {target_language})",
+      "options": ["Option 1", "Option 2"], // 2-5 common answers for the user to tap, translated to {target_language}
+      "red_flag": boolean, // true if symptoms indicate a medical emergency (e.g. severe chest pain, stroke signs)
+      "complete": boolean, // true if you have collected enough information (typically after 3-5 turns)
+      "summary": null // If complete is true, provide a structured summary object (this MUST be in English for the doctor)
+    }}
+
+    If complete is true, the summary object should have this schema:
+    {{
+      "chief_complaint": "string",
+      "history": {{
+        "present_illness": "string",
+        "duration": "string",
+        "associated_symptoms": ["string"]
+      }},
+      "medications": ["string"],
+      "allergies": "string",
+      "family_history": "string",
+      "personal_history": "string",
+      "review_of_systems": "string",
+      "ai_flags": ["string"]
+    }}
+    """
+    
+    # Build conversation context
+    history_text = "Conversation History:\n"
+    if req.history:
+        for entry in req.history:
+            history_text += f"AI: {entry.question}\nPatient: {entry.answer}\n\n"
+    else:
+        history_text += f"AI: {req.question}\nPatient: {req.answer}\n\n"
+        
+    user_text = f"""
+    Patient Profile:
+    Name: {req.patient.name}, Age: {req.patient.age}, Gender: {req.patient.gender}
+    
+    {history_text}
+    
+    Based on the conversation so far, generate the next JSON response.
+    """
+    
+    gemini_req = GeminiRequest(
+        systemInstruction=system_instruction,
+        userText=user_text,
+        json=True
+    )
+    
+    try:
+        response_text = call_gemini_api(gemini_req)
+        # Parse JSON
+        result = json.loads(response_text)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gemini API Error: {str(e)}")
